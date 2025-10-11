@@ -1,0 +1,128 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configure Freebox Connect",
+        "description": "Enter your Freebox connection details",
+        "data": {
+          "host": "Host (local domain like xxxxxx.fbxos.fr)",
+          "port": "Port"
+        }
+      },
+      "confirm": {
+        "title": "Confirm Freebox Discovery",
+        "description": "Found Freebox: {name} at {host}"
+      },
+      "authorize": {
+        "title": "Authorize Home Assistant",
+        "description": "{message}"
+      },
+      "options": {
+        "title": "Freebox Connect Options",
+        "description": "Do you want to track all devices on your local network?\n\nIf disabled, only the main Freebox device will be added.",
+        "data": {
+          "track_network_devices": "Track network devices"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to Freebox",
+      "auth_failed": "Failed to request authorization",
+      "unknown": "Unexpected error occurred"
+    },
+    "abort": {
+      "already_configured": "Device is already configured",
+      "cannot_connect": "Cannot connect to Freebox",
+      "auth_denied": "Authorization denied. Please try again and press the button on your Freebox.",
+      "auth_timeout": "Authorization timeout. Please try again.",
+      "auth_check_failed": "Failed to check authorization status",
+      "discovery_failed": "Automatic discovery failed. Please enter your Freebox details manually."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Freebox Connect Options",
+        "description": "Configure Freebox Connect integration options",
+        "data": {
+          "track_network_devices": "Track network devices"
+        },
+        "data_description": {
+          "track_network_devices": "If enabled, all devices connected to the local network will be tracked. If disabled, only the main Freebox device will be added."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "freebox_connection_status": {
+        "name": "Connection Status",
+        "state": {
+          "up": "Up",
+          "down": "Down",
+          "unknown": "Unknown"
+        }
+      },
+      "freebox_uptime": {
+        "name": "Uptime"
+      },
+      "freebox_wifi_state": {
+        "name": "WiFi State",
+        "state": {
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        }
+      },
+      "signal_quality": {
+        "name": "Signal Quality"
+      },
+      "freebox_storage": {
+        "name": "Storage"
+      },
+      "state": {
+        "name": "State",
+        "state": {
+          "running": "Running",
+          "stopped": "Stopped",
+          "unknown": "Unknown"
+        }
+      },
+      "uptime": {
+        "name": "Uptime"
+      },
+      "connected_devices": {
+        "name": "Connected Devices"
+      }
+    },
+    "button": {
+      "freebox_reboot": {
+        "name": "Reboot"
+      },
+      "reboot": {
+        "name": "Reboot"
+      }
+    },
+    "switch": {
+      "freebox_wifi": {
+        "name": "WiFi"
+      },
+      "freebox_led_indicator": {
+        "name": "LED Indicator"
+      },
+      "led_indicator": {
+        "name": "LED Indicator"
+      },
+      "hide_wifi_key": {
+        "name": "Hide WiFi Key"
+      },
+      "display_rotated_180°": {
+        "name": "Display Rotated 180°"
+      }
+    },
+    "update": {
+      "freebox_firmware": {
+        "name": "Freebox Firmware"
+      }
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurer Freebox Connect",
+        "description": "Entrez les détails de connexion de votre Freebox",
+        "data": {
+          "host": "Hôte (domaine local comme xxxxxx.fbxos.fr)",
+          "port": "Port"
+        }
+      },
+      "confirm": {
+        "title": "Confirmer la découverte de la Freebox",
+        "description": "Freebox trouvée : {name} à l'adresse {host}"
+      },
+      "authorize": {
+        "title": "Autoriser Home Assistant",
+        "description": "{message}"
+      },
+      "options": {
+        "title": "Options de Freebox Connect",
+        "description": "Voulez-vous suivre tous les appareils de votre réseau local ?\n\nSi désactivé, seul l'équipement principal Freebox sera ajouté.",
+        "data": {
+          "track_network_devices": "Suivre les appareils du réseau"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Échec de la connexion à la Freebox",
+      "auth_failed": "Échec de la demande d'autorisation",
+      "unknown": "Une erreur inattendue s'est produite"
+    },
+    "abort": {
+      "already_configured": "Cet appareil est déjà configuré",
+      "cannot_connect": "Impossible de se connecter à la Freebox",
+      "auth_denied": "Autorisation refusée. Veuillez réessayer et appuyer sur le bouton de votre Freebox.",
+      "auth_timeout": "Délai d'autorisation dépassé. Veuillez réessayer.",
+      "auth_check_failed": "Échec de la vérification du statut d'autorisation",
+      "discovery_failed": "La découverte automatique a échoué. Veuillez entrer les détails de votre Freebox manuellement."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options de Freebox Connect",
+        "description": "Configurez les options de l'intégration Freebox Connect",
+        "data": {
+          "track_network_devices": "Suivre les appareils du réseau"
+        },
+        "data_description": {
+          "track_network_devices": "Si activé, tous les appareils connectés au réseau local seront suivis. Si désactivé, seul l'équipement principal Freebox sera ajouté."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "freebox_connection_status": {
+        "name": "Statut de connexion",
+        "state": {
+          "up": "Actif",
+          "down": "Inactif",
+          "unknown": "Inconnu"
+        }
+      },
+      "freebox_uptime": {
+        "name": "Temps de fonctionnement"
+      },
+      "freebox_wifi_state": {
+        "name": "État du WiFi",
+        "state": {
+          "enabled": "Activé",
+          "disabled": "Désactivé"
+        }
+      },
+      "signal_quality": {
+        "name": "Qualité du signal"
+      },
+      "freebox_storage": {
+        "name": "Stockage"
+      },
+      "state": {
+        "name": "État",
+        "state": {
+          "running": "En fonctionnement",
+          "stopped": "Arrêté",
+          "unknown": "Inconnu"
+        }
+      },
+      "uptime": {
+        "name": "Temps de fonctionnement"
+      },
+      "connected_devices": {
+        "name": "Appareils connectés"
+      }
+    },
+    "button": {
+      "freebox_reboot": {
+        "name": "Redémarrer"
+      },
+      "reboot": {
+        "name": "Redémarrer"
+      }
+    },
+    "switch": {
+      "freebox_wifi": {
+        "name": "WiFi"
+      },
+      "freebox_led_indicator": {
+        "name": "Voyant LED"
+      },
+      "led_indicator": {
+        "name": "Voyant LED"
+      },
+      "hide_wifi_key": {
+        "name": "Masquer la clé WiFi"
+      },
+      "display_rotated_180°": {
+        "name": "Afficheur retourné 180°"
+      }
+    },
+    "update": {
+      "freebox_firmware": {
+        "name": "Firmware Freebox"
+      }
+    }
+  }
+}
