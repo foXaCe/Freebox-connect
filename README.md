@@ -9,7 +9,7 @@ Intégration HACS pour contrôler votre Freebox via Home Assistant, basée sur l
 1. Ouvrez HACS dans Home Assistant
 2. Allez dans "Intégrations"
 3. Cliquez sur les 3 points en haut à droite → "Dépôts personnalisés"
-4. Ajoutez l'URL : `https://github.com/your-username/freebox-connect`
+4. Ajoutez l'URL : `https://github.com/foXaCe/Freebox-connect`
 5. Sélectionnez la catégorie "Intégration"
 6. Cliquez sur "Ajouter"
 7. Recherchez "Freebox Connect" et installez
@@ -26,7 +26,7 @@ Intégration HACS pour contrôler votre Freebox via Home Assistant, basée sur l
 1. Allez dans **Paramètres** → **Appareils et services**
 2. Cliquez sur **+ Ajouter une intégration**
 3. Recherchez "Freebox Connect"
-4. Entrez le nom d'hôte de votre Freebox (ex: `5mu9y3pt.fbxos.fr`)
+4. Entrez le nom d'hôte de votre Freebox (ex: `xxxxxxxx.fbxos.fr`)
 5. Entrez le port (par défaut: `46535`)
 
 ## Fonctionnalités
@@ -159,9 +159,9 @@ Lancez l'application Freebox Connect. Le trafic apparaît maintenant dans votre 
 L'app utilise l'API locale de la Freebox via HTTPS :
 
 ```
-POST https://5mu9y3pt.fbxos.fr:46535/api/v15/login/session/
-GET  https://5mu9y3pt.fbxos.fr:46535/api/v11/system/
-GET  https://5mu9y3pt.fbxos.fr:46535/api/v11/login/perms/
+POST https://xxxxxxxx.fbxos.fr:46535/api/v15/login/session/
+GET  https://xxxxxxxx.fbxos.fr:46535/api/v11/system/
+GET  https://xxxxxxxx.fbxos.fr:46535/api/v11/login/perms/
 ```
 
 Le domaine `*.fbxos.fr` pointe vers votre Freebox locale (IPv6/IPv4).
