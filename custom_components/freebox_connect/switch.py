@@ -90,16 +90,12 @@ class FreeboxWiFiSwitch(CoordinatorEntity, SwitchEntity):
         """Turn WiFi on."""
         _LOGGER.info("Turning Freebox WiFi on...")
         try:
-            result = await self.coordinator.api.put(
+            await self.coordinator.api.put(
                 self.coordinator.session,
                 API_WIFI_CONFIG,
                 {"enabled": True}
             )
-            # API may return None or empty result (operation is processing)
-            if result is not None:
-                _LOGGER.info("Freebox WiFi turned on successfully")
-            else:
-                _LOGGER.info("Freebox WiFi turn on command sent")
+            _LOGGER.info("Freebox WiFi turned on successfully")
             # Update coordinator data immediately to avoid visual bounce
             if "wifi_config" in self.coordinator.data:
                 self.coordinator.data["wifi_config"]["enabled"] = True
@@ -111,16 +107,12 @@ class FreeboxWiFiSwitch(CoordinatorEntity, SwitchEntity):
         """Turn WiFi off."""
         _LOGGER.info("Turning Freebox WiFi off...")
         try:
-            result = await self.coordinator.api.put(
+            await self.coordinator.api.put(
                 self.coordinator.session,
                 API_WIFI_CONFIG,
                 {"enabled": False}
             )
-            # API may return None or empty result (operation is processing)
-            if result is not None:
-                _LOGGER.info("Freebox WiFi turned off successfully")
-            else:
-                _LOGGER.info("Freebox WiFi turn off command sent")
+            _LOGGER.info("Freebox WiFi turned off successfully")
             # Update coordinator data immediately to avoid visual bounce
             if "wifi_config" in self.coordinator.data:
                 self.coordinator.data["wifi_config"]["enabled"] = False
@@ -167,19 +159,16 @@ class FreeboxServerLEDSwitch(CoordinatorEntity, SwitchEntity):
         """Turn LED on (show status LED)."""
         _LOGGER.info("Turning Freebox server LED on...")
         try:
-            result = await self.coordinator.api.put(
+            await self.coordinator.api.put(
                 self.coordinator.session,
                 API_LCD,
                 {"hide_status_led": False}
             )
-            if result:
-                _LOGGER.info("Freebox server LED turned on successfully")
-                # Update coordinator data immediately to avoid visual bounce
-                if "lcd_config" in self.coordinator.data:
-                    self.coordinator.data["lcd_config"]["hide_status_led"] = False
-                self.async_write_ha_state()
-            else:
-                _LOGGER.error("Failed to turn on Freebox server LED")
+            _LOGGER.info("Freebox server LED turned on successfully")
+            # Update coordinator data immediately to avoid visual bounce
+            if "lcd_config" in self.coordinator.data:
+                self.coordinator.data["lcd_config"]["hide_status_led"] = False
+            self.async_write_ha_state()
         except Exception as err:
             _LOGGER.error(f"Error turning on Freebox server LED: {err}")
 
@@ -187,19 +176,16 @@ class FreeboxServerLEDSwitch(CoordinatorEntity, SwitchEntity):
         """Turn LED off (hide status LED)."""
         _LOGGER.info("Turning Freebox server LED off...")
         try:
-            result = await self.coordinator.api.put(
+            await self.coordinator.api.put(
                 self.coordinator.session,
                 API_LCD,
                 {"hide_status_led": True}
             )
-            if result:
-                _LOGGER.info("Freebox server LED turned off successfully")
-                # Update coordinator data immediately to avoid visual bounce
-                if "lcd_config" in self.coordinator.data:
-                    self.coordinator.data["lcd_config"]["hide_status_led"] = True
-                self.async_write_ha_state()
-            else:
-                _LOGGER.error("Failed to turn off Freebox server LED")
+            _LOGGER.info("Freebox server LED turned off successfully")
+            # Update coordinator data immediately to avoid visual bounce
+            if "lcd_config" in self.coordinator.data:
+                self.coordinator.data["lcd_config"]["hide_status_led"] = True
+            self.async_write_ha_state()
         except Exception as err:
             _LOGGER.error(f"Error turning off Freebox server LED: {err}")
 
@@ -253,23 +239,20 @@ class FreeboxRepeaterLEDSwitch(CoordinatorEntity, SwitchEntity):
         """Turn LED indicator on."""
         _LOGGER.info(f"Turning Freebox repeater {self._repeater_id} LED on...")
         try:
-            result = await self.coordinator.api.put(
+            await self.coordinator.api.put(
                 self.coordinator.session,
                 f"{API_REPEATER}{self._repeater_id}",
                 {"led_activated": True}
             )
-            if result:
-                _LOGGER.info(f"Freebox repeater {self._repeater_id} LED turned on successfully")
-                # Update coordinator data immediately to avoid visual bounce
-                if repeater_data := self.coordinator.data.get("repeater"):
-                    if isinstance(repeater_data, list):
-                        for repeater in repeater_data:
-                            if repeater.get("id") == self._repeater_id:
-                                repeater["led_activated"] = True
-                                break
-                self.async_write_ha_state()
-            else:
-                _LOGGER.error(f"Failed to turn on Freebox repeater {self._repeater_id} LED")
+            _LOGGER.info(f"Freebox repeater {self._repeater_id} LED turned on successfully")
+            # Update coordinator data immediately to avoid visual bounce
+            if repeater_data := self.coordinator.data.get("repeater"):
+                if isinstance(repeater_data, list):
+                    for repeater in repeater_data:
+                        if repeater.get("id") == self._repeater_id:
+                            repeater["led_activated"] = True
+                            break
+            self.async_write_ha_state()
         except Exception as err:
             _LOGGER.error(f"Error turning on Freebox repeater {self._repeater_id} LED: {err}")
 
@@ -277,23 +260,20 @@ class FreeboxRepeaterLEDSwitch(CoordinatorEntity, SwitchEntity):
         """Turn LED indicator off."""
         _LOGGER.info(f"Turning Freebox repeater {self._repeater_id} LED off...")
         try:
-            result = await self.coordinator.api.put(
+            await self.coordinator.api.put(
                 self.coordinator.session,
                 f"{API_REPEATER}{self._repeater_id}",
                 {"led_activated": False}
             )
-            if result:
-                _LOGGER.info(f"Freebox repeater {self._repeater_id} LED turned off successfully")
-                # Update coordinator data immediately to avoid visual bounce
-                if repeater_data := self.coordinator.data.get("repeater"):
-                    if isinstance(repeater_data, list):
-                        for repeater in repeater_data:
-                            if repeater.get("id") == self._repeater_id:
-                                repeater["led_activated"] = False
-                                break
-                self.async_write_ha_state()
-            else:
-                _LOGGER.error(f"Failed to turn off Freebox repeater {self._repeater_id} LED")
+            _LOGGER.info(f"Freebox repeater {self._repeater_id} LED turned off successfully")
+            # Update coordinator data immediately to avoid visual bounce
+            if repeater_data := self.coordinator.data.get("repeater"):
+                if isinstance(repeater_data, list):
+                    for repeater in repeater_data:
+                        if repeater.get("id") == self._repeater_id:
+                            repeater["led_activated"] = False
+                            break
+            self.async_write_ha_state()
         except Exception as err:
             _LOGGER.error(f"Error turning off Freebox repeater {self._repeater_id} LED: {err}")
 
@@ -334,18 +314,15 @@ class FreeboxHideWiFiKeySwitch(CoordinatorEntity, SwitchEntity):
         """Hide WiFi key on display."""
         _LOGGER.info("Hiding Freebox WiFi key on display...")
         try:
-            result = await self.coordinator.api.put(
+            await self.coordinator.api.put(
                 self.coordinator.session,
                 API_LCD,
                 {"hide_wifi_key": True}
             )
-            if result:
-                _LOGGER.info("Freebox WiFi key hidden successfully")
-                if "lcd_config" in self.coordinator.data:
-                    self.coordinator.data["lcd_config"]["hide_wifi_key"] = True
-                self.async_write_ha_state()
-            else:
-                _LOGGER.info("Freebox WiFi key hide command sent")
+            _LOGGER.info("Freebox WiFi key hidden successfully")
+            if "lcd_config" in self.coordinator.data:
+                self.coordinator.data["lcd_config"]["hide_wifi_key"] = True
+            self.async_write_ha_state()
         except Exception as err:
             _LOGGER.error(f"Error hiding Freebox WiFi key: {err}")
 
@@ -353,18 +330,15 @@ class FreeboxHideWiFiKeySwitch(CoordinatorEntity, SwitchEntity):
         """Show WiFi key on display."""
         _LOGGER.info("Showing Freebox WiFi key on display...")
         try:
-            result = await self.coordinator.api.put(
+            await self.coordinator.api.put(
                 self.coordinator.session,
                 API_LCD,
                 {"hide_wifi_key": False}
             )
-            if result:
-                _LOGGER.info("Freebox WiFi key shown successfully")
-                if "lcd_config" in self.coordinator.data:
-                    self.coordinator.data["lcd_config"]["hide_wifi_key"] = False
-                self.async_write_ha_state()
-            else:
-                _LOGGER.info("Freebox WiFi key show command sent")
+            _LOGGER.info("Freebox WiFi key shown successfully")
+            if "lcd_config" in self.coordinator.data:
+                self.coordinator.data["lcd_config"]["hide_wifi_key"] = False
+            self.async_write_ha_state()
         except Exception as err:
             _LOGGER.error(f"Error showing Freebox WiFi key: {err}")
 
@@ -406,18 +380,15 @@ class FreeboxRotateDisplaySwitch(CoordinatorEntity, SwitchEntity):
         """Rotate display to 180°."""
         _LOGGER.info("Rotating Freebox display to 180°...")
         try:
-            result = await self.coordinator.api.put(
+            await self.coordinator.api.put(
                 self.coordinator.session,
                 API_LCD,
                 {"orientation": 180}
             )
-            if result:
-                _LOGGER.info("Freebox display rotated to 180° successfully")
-                if "lcd_config" in self.coordinator.data:
-                    self.coordinator.data["lcd_config"]["orientation"] = 180
-                self.async_write_ha_state()
-            else:
-                _LOGGER.info("Freebox display rotation command sent")
+            _LOGGER.info("Freebox display rotated to 180° successfully")
+            if "lcd_config" in self.coordinator.data:
+                self.coordinator.data["lcd_config"]["orientation"] = 180
+            self.async_write_ha_state()
         except Exception as err:
             _LOGGER.error(f"Error rotating Freebox display: {err}")
 
@@ -425,17 +396,14 @@ class FreeboxRotateDisplaySwitch(CoordinatorEntity, SwitchEntity):
         """Rotate display to 0° (normal)."""
         _LOGGER.info("Rotating Freebox display to 0° (normal)...")
         try:
-            result = await self.coordinator.api.put(
+            await self.coordinator.api.put(
                 self.coordinator.session,
                 API_LCD,
                 {"orientation": 0}
             )
-            if result:
-                _LOGGER.info("Freebox display rotated to 0° successfully")
-                if "lcd_config" in self.coordinator.data:
-                    self.coordinator.data["lcd_config"]["orientation"] = 0
-                self.async_write_ha_state()
-            else:
-                _LOGGER.info("Freebox display rotation command sent")
+            _LOGGER.info("Freebox display rotated to 0° successfully")
+            if "lcd_config" in self.coordinator.data:
+                self.coordinator.data["lcd_config"]["orientation"] = 0
+            self.async_write_ha_state()
         except Exception as err:
             _LOGGER.error(f"Error rotating Freebox display: {err}")
