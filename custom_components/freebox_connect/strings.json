@@ -37,6 +37,7 @@
     }
   },
   "title": "Freebox Connect",
+  "name": "Freebox Connect",
   "config_flow_title": "Contrôle de votre Freebox",
-  "description": "Contrôlez votre Freebox et ses répéteurs WiFi : gestion WiFi, LED, redémarrage, suivi des appareils réseau et bien plus."
+  "description": "Contrôlez votre Freebox et ses répéteurs WiFi"
 }

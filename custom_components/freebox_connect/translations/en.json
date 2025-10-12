@@ -1,5 +1,7 @@
 {
   "title": "Freebox Connect",
+  "name": "Freebox Connect",
+  "description": "Control your Freebox and WiFi repeaters",
   "config": {
     "step": {
       "user": {

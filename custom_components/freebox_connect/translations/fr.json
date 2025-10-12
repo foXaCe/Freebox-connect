@@ -1,5 +1,7 @@
 {
   "title": "Freebox Connect",
+  "name": "Freebox Connect",
+  "description": "Contrôlez votre Freebox et ses répéteurs WiFi",
   "config": {
     "step": {
       "user": {
