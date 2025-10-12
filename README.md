@@ -52,6 +52,37 @@ Après avoir configuré l'intégration :
 
 > 💡 **Astuce** : Si certaines fonctionnalités (switches, boutons) ne fonctionnent toujours pas, vérifiez que tous les droits sont bien activés dans la gestion des accès.
 
+## Stockage des Données
+
+### Token d'Authentification
+
+Le token d'authentification (`app_token`) est stocké de manière sécurisée par Home Assistant dans :
+
+```
+<config_directory>/.storage/core.config_entries
+```
+
+**Sécurité :**
+- ✅ Fichier protégé par permissions système (accessible uniquement par l'utilisateur Home Assistant)
+- ✅ Inclus automatiquement dans les sauvegardes Home Assistant
+- ℹ️ Token stocké en clair dans le fichier (protection par permissions uniquement)
+- ⚠️ Ne jamais partager ce fichier ou votre token
+
+**Format de stockage :**
+```json
+{
+  "entry_id": "...",
+  "domain": "freebox_connect",
+  "title": "Freebox Ultra",
+  "data": {
+    "host": "xxxxxxxx.fbxos.fr",
+    "port": 46535,
+    "app_token": "votre_token_secret",
+    "use_https": true
+  }
+}
+```
+
 ## Fonctionnalités
 
 ### Capteurs disponibles
