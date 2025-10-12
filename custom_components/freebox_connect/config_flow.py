@@ -34,6 +34,43 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     }
 )
 
+# Mapping of box_model to commercial names
+BOX_MODEL_NAMES = {
+    "fbxgw11-r1": "Freebox Ultra",
+    "fbxgw10-r1": "Freebox Ultra",
+    "fbxgw9-r1": "Freebox Pop",  # Server v9
+    "fbxgw8-r1": "Freebox Pop",
+    "fbxgw7-r1": "Freebox Delta",
+    "fbxgw6-r2": "Freebox One",
+    "fbxgw6-r1": "Freebox One",
+    "fbxgw-r2": "Freebox Revolution",
+    "fbxgw-r1": "Freebox Revolution",
+    "fbxgw5-r1": "Freebox Mini 4K",
+}
+
+
+def _get_freebox_model_name(api_info: dict[str, Any]) -> str:
+    """Extract friendly Freebox model name from API info."""
+    if not api_info:
+        return "Freebox"
+
+    # Priority 1: Use box_model_name from API (most reliable)
+    box_model_name = api_info.get("box_model_name")
+    if box_model_name:
+        # Clean up the name (e.g., "Freebox v9 (r1)" -> "Freebox v9")
+        if " (" in box_model_name:
+            return box_model_name.split(" (")[0]
+        return box_model_name
+
+    # Priority 2: Try to map box_model to commercial name
+    box_model = api_info.get("box_model", "")
+    if box_model in BOX_MODEL_NAMES:
+        return BOX_MODEL_NAMES[box_model]
+
+    # Priority 3: Fallback to device_name
+    device_name = api_info.get("device_name", "Freebox")
+    return device_name
+
 
 class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Freebox Connect."""
@@ -69,10 +106,8 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         # Store use_https for later
         self.use_https = use_https
 
-        # Get device name from API
-        device_name = "Freebox"
-        if api_info:
-            device_name = api_info.get("device_name", "Freebox")
+        # Get friendly device name from API
+        device_name = _get_freebox_model_name(api_info)
 
         # Store discovery info for later use
         self.discovery_info = {
@@ -125,10 +160,8 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 # Store use_https and device info for later
                 self.use_https = use_https
 
-                # Extract device model from API info
-                device_name = "Freebox"
-                if api_info:
-                    device_name = api_info.get("device_name", "Freebox")
+                # Extract friendly device model from API info
+                device_name = _get_freebox_model_name(api_info)
 
                 # Store discovery info for title
                 self.discovery_info = {
@@ -291,10 +324,9 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             # Store use_https for later
             self.use_https = use_https
 
-            # Update device name from API if available
-            if api_info:
-                device_name = api_info.get("device_name", "Freebox")
-                self.discovery_info["name"] = device_name
+            # Update device name with friendly model name
+            device_name = _get_freebox_model_name(api_info)
+            self.discovery_info["name"] = device_name
 
             # Connection successful, now request authorization
             self.freebox_api = FreeboxAPI(
