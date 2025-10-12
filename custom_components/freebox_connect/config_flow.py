@@ -36,15 +36,13 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 
 # Mapping of box_model to commercial names
 BOX_MODEL_NAMES = {
-    "fbxgw11-r1": "Freebox Ultra",
-    "fbxgw10-r1": "Freebox Ultra",
-    "fbxgw9-r1": "Freebox Server",  # v9
-    "fbxgw8-r1": "Freebox Pop",  # v8
-    "fbxgw7-r1": "Freebox Delta",  # v7
-    "fbxgw6-r2": "Freebox One",  # v6
-    "fbxgw6-r1": "Freebox One",  # v6
-    "fbxgw-r2": "Freebox Revolution",  # v5
-    "fbxgw-r1": "Freebox Revolution",  # v5
+    "fbxgw9-r1": "Freebox Ultra",  # v9 - WiFi 7 (2024)
+    "fbxgw8-r1": "Freebox Pop",  # v8 - WiFi 6 (2020)
+    "fbxgw7-r1": "Freebox Delta",  # v7 - WiFi 5 (2018)
+    "fbxgw6-r2": "Freebox One",  # v6 (2018)
+    "fbxgw6-r1": "Freebox One",  # v6 (2018)
+    "fbxgw-r2": "Freebox Revolution",  # v5 (2010)
+    "fbxgw-r1": "Freebox Revolution",  # v5 (2010)
     "fbxgw5-r1": "Freebox Mini 4K",  # v5
 }
 
