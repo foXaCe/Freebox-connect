@@ -236,16 +236,8 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 status = await self.freebox_api.track_authorization(session, self.track_id)
 
                 if status == "granted":
-                    # Create entry directly without options
-                    return self.async_create_entry(
-                        title=f"Freebox ({self.freebox_api.host})",
-                        data={
-                            CONF_HOST: self.freebox_api.host,
-                            CONF_PORT: self.freebox_api.port,
-                            CONF_APP_TOKEN: self.app_token,
-                            CONF_USE_HTTPS: self.use_https,
-                        },
-                    )
+                    # Authorization granted, show final step with permissions info
+                    return await self.async_step_finish()
                 elif status == "denied":
                     _LOGGER.error("Authorization denied by user")
                     return self.async_abort(reason="auth_denied")
@@ -287,3 +279,26 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return await self.async_step_authorize()
 
         return self.async_abort(reason="cannot_connect")
+
+    async def async_step_finish(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Final step with permissions information."""
+        if user_input is not None:
+            # Create entry
+            return self.async_create_entry(
+                title=f"Freebox ({self.freebox_api.host})",
+                data={
+                    CONF_HOST: self.freebox_api.host,
+                    CONF_PORT: self.freebox_api.port,
+                    CONF_APP_TOKEN: self.app_token,
+                    CONF_USE_HTTPS: self.use_https,
+                },
+            )
+
+        return self.async_show_form(
+            step_id="finish",
+            description_placeholders={
+                "message": "✅ Autorisation accordée !\n\n⚠️ IMPORTANT : Pour que toutes les fonctionnalités fonctionnent (contrôle LED, WiFi, redémarrage, etc.), vous devez activer les droits de gestion :\n\n1. Allez sur http://mafreebox.freebox.fr/\n2. Connectez-vous\n3. Allez dans 'Paramètres de la Freebox' → 'Gestion des accès'\n4. Cherchez 'Home Assistant Freebox Connect'\n5. Activez TOUS les droits de gestion\n6. Enregistrez\n\nCliquez sur 'Terminer' pour finaliser la configuration."
+            },
+        )

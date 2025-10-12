@@ -17,6 +17,10 @@
         "title": "Autoriser Home Assistant",
         "description": "{message}"
       },
+      "finish": {
+        "title": "Configuration terminée",
+        "description": "{message}"
+      },
       "options": {
         "title": "Options de Freebox Connect",
         "description": "Voulez-vous suivre tous les appareils de votre réseau local ?\n\nSi désactivé, seul l'équipement principal Freebox sera ajouté.",

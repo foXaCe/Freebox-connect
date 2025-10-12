@@ -23,11 +23,34 @@ Intégration HACS pour contrôler votre Freebox via Home Assistant, basée sur l
 
 ## Configuration
 
+### Étape 1 : Ajouter l'intégration dans Home Assistant
+
 1. Allez dans **Paramètres** → **Appareils et services**
 2. Cliquez sur **+ Ajouter une intégration**
 3. Recherchez "Freebox Connect"
 4. Entrez le nom d'hôte de votre Freebox (ex: `xxxxxxxx.fbxos.fr`)
 5. Entrez le port (par défaut: `46535`)
+6. Validez l'accès en appuyant sur la flèche lumineuse de votre Freebox
+
+### Étape 2 : Activer les permissions (IMPORTANT !)
+
+⚠️ **Sans cette étape, certaines fonctionnalités (comme le contrôle des LEDs des répéteurs, WiFi, redémarrage, etc.) ne fonctionneront pas.**
+
+Après avoir configuré l'intégration :
+
+1. Ouvrez votre navigateur et allez sur **[http://mafreebox.freebox.fr/](http://mafreebox.freebox.fr/)**
+2. Connectez-vous avec votre compte Freebox
+3. Allez dans **Paramètres de la Freebox** → **Gestion des accès**
+4. Recherchez l'application **"Home Assistant Freebox Connect"**
+5. Cliquez dessus et activez **tous les droits de gestion** :
+   - ✅ Modification des réglages de la Freebox
+   - ✅ Gestion du système Freebox
+   - ✅ Gestion des appareils réseau
+   - ✅ Gestion du WiFi
+   - etc.
+6. Enregistrez les modifications
+
+> 💡 **Astuce** : Si certaines fonctionnalités (switches, boutons) ne fonctionnent toujours pas, vérifiez que tous les droits sont bien activés dans la gestion des accès.
 
 ## Fonctionnalités
 

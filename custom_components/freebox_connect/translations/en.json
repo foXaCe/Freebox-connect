@@ -17,6 +17,10 @@
         "title": "Authorize Home Assistant",
         "description": "{message}"
       },
+      "finish": {
+        "title": "Setup Complete",
+        "description": "{message}"
+      },
       "options": {
         "title": "Freebox Connect Options",
         "description": "Do you want to track all devices on your local network?\n\nIf disabled, only the main Freebox device will be added.",
