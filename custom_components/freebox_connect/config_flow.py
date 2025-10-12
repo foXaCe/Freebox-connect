@@ -262,7 +262,7 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_show_form(
                 step_id="authorize",
                 description_placeholders={
-                    "message": "Appuyez sur le bouton de votre Freebox pour autoriser Home Assistant.\n\nUne fois que vous avez appuyé sur le bouton, cliquez sur 'Continuer'."
+                    "message": "Appuyez sur le bouton de votre Freebox pour autoriser Home Assistant.\n\nUne fois que vous avez appuyé sur le bouton, cliquez sur 'Valider'."
                 },
             )
         except FreeboxAuthorizationError as err:
@@ -366,6 +366,6 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="finish",
             description_placeholders={
-                "message": "✅ Autorisation accordée !\n\n⚠️ IMPORTANT : Pour que toutes les fonctionnalités fonctionnent (contrôle LED, WiFi, redémarrage, etc.), vous devez activer les droits de gestion :\n\n1. Allez sur http://mafreebox.freebox.fr/\n2. Connectez-vous\n3. Allez dans 'Paramètres de la Freebox' → 'Gestion des accès'\n4. Cherchez 'Home Assistant Freebox Connect'\n5. Activez TOUS les droits de gestion\n6. Enregistrez\n\nCliquez sur 'Terminer' pour finaliser la configuration."
+                "message": "✅ Autorisation accordée !\n\n⚠️ IMPORTANT : Pour que toutes les fonctionnalités fonctionnent (contrôle LED, WiFi, redémarrage, etc.), vous devez activer les droits de gestion :\n\n1. Allez sur http://mafreebox.freebox.fr/\n2. Connectez-vous\n3. Allez dans 'Paramètres de la Freebox' → 'Gestion des accès'\n4. Cherchez 'Home Assistant Freebox Connect'\n5. Activez TOUS les droits de gestion\n6. Enregistrez\n\nCliquez sur 'Valider' pour finaliser la configuration."
             },
         )
