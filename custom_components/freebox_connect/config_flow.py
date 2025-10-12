@@ -38,14 +38,14 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 BOX_MODEL_NAMES = {
     "fbxgw11-r1": "Freebox Ultra",
     "fbxgw10-r1": "Freebox Ultra",
-    "fbxgw9-r1": "Freebox Pop",  # Server v9
-    "fbxgw8-r1": "Freebox Pop",
-    "fbxgw7-r1": "Freebox Delta",
-    "fbxgw6-r2": "Freebox One",
-    "fbxgw6-r1": "Freebox One",
-    "fbxgw-r2": "Freebox Revolution",
-    "fbxgw-r1": "Freebox Revolution",
-    "fbxgw5-r1": "Freebox Mini 4K",
+    "fbxgw9-r1": "Freebox Server",  # v9
+    "fbxgw8-r1": "Freebox Pop",  # v8
+    "fbxgw7-r1": "Freebox Delta",  # v7
+    "fbxgw6-r2": "Freebox One",  # v6
+    "fbxgw6-r1": "Freebox One",  # v6
+    "fbxgw-r2": "Freebox Revolution",  # v5
+    "fbxgw-r1": "Freebox Revolution",  # v5
+    "fbxgw5-r1": "Freebox Mini 4K",  # v5
 }
 
 
@@ -54,7 +54,17 @@ def _get_freebox_model_name(api_info: dict[str, Any]) -> str:
     if not api_info:
         return "Freebox"
 
-    # Priority 1: Use box_model_name from API (most reliable)
+    # Priority 1: Try to map box_model to commercial name (most user-friendly)
+    box_model = api_info.get("box_model", "")
+    if box_model in BOX_MODEL_NAMES:
+        return BOX_MODEL_NAMES[box_model]
+
+    # Priority 2: Use device_name from API (e.g., "Freebox Server")
+    device_name = api_info.get("device_name")
+    if device_name and device_name != "Freebox":
+        return device_name
+
+    # Priority 3: Fallback to box_model_name and clean it up
     box_model_name = api_info.get("box_model_name")
     if box_model_name:
         # Clean up the name (e.g., "Freebox v9 (r1)" -> "Freebox v9")
@@ -62,14 +72,8 @@ def _get_freebox_model_name(api_info: dict[str, Any]) -> str:
             return box_model_name.split(" (")[0]
         return box_model_name
 
-    # Priority 2: Try to map box_model to commercial name
-    box_model = api_info.get("box_model", "")
-    if box_model in BOX_MODEL_NAMES:
-        return BOX_MODEL_NAMES[box_model]
-
-    # Priority 3: Fallback to device_name
-    device_name = api_info.get("device_name", "Freebox")
-    return device_name
+    # Priority 4: Ultimate fallback
+    return "Freebox"
 
 
 class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
