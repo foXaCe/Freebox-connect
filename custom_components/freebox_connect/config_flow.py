@@ -57,19 +57,28 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         host = discovery_info.host
         port = discovery_info.port or 46535
 
-        # Get Freebox name from properties if available
-        properties = discovery_info.properties or {}
-        fbx_name = properties.get("fbx_name", "Freebox")
-
         # Set unique ID to prevent duplicate entries
         await self.async_set_unique_id(f"{host}_{port}")
         self._abort_if_unique_id_configured()
+
+        # Fetch device info from API to get real model name
+        success, use_https, api_info = await self._async_test_connection(host, port)
+        if not success:
+            return self.async_abort(reason="cannot_connect")
+
+        # Store use_https for later
+        self.use_https = use_https
+
+        # Get device name from API
+        device_name = "Freebox"
+        if api_info:
+            device_name = api_info.get("device_name", "Freebox")
 
         # Store discovery info for later use
         self.discovery_info = {
             CONF_HOST: host,
             CONF_PORT: port,
-            "name": fbx_name,
+            "name": device_name,
         }
 
         # Show confirmation form to user
