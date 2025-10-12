@@ -12,7 +12,7 @@
       },
       "confirm": {
         "title": "Confirm Freebox Discovery",
-        "description": "Found Freebox: {name} at {host}"
+        "description": "{name} detected at {host}"
       },
       "authorize": {
         "title": "Authorize Home Assistant",

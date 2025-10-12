@@ -111,10 +111,23 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self._abort_if_unique_id_configured()
 
             # Try to connect to the Freebox
-            success, use_https = await self._async_test_connection(host, port)
+            success, use_https, api_info = await self._async_test_connection(host, port)
             if success:
-                # Store use_https for later
+                # Store use_https and device info for later
                 self.use_https = use_https
+
+                # Extract device model from API info
+                device_name = "Freebox"
+                if api_info:
+                    device_name = api_info.get("device_name", "Freebox")
+
+                # Store discovery info for title
+                self.discovery_info = {
+                    CONF_HOST: host,
+                    CONF_PORT: port,
+                    "name": device_name,
+                }
+
                 # Connection successful, now request authorization
                 self.freebox_api = FreeboxAPI(
                     host=host,
@@ -151,11 +164,11 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors={"base": "discovery_failed"},
         )
 
-    async def _async_test_connection(self, host: str, port: int) -> tuple[bool, bool]:
+    async def _async_test_connection(self, host: str, port: int) -> tuple[bool, bool, dict[str, Any] | None]:
         """Test connection to Freebox.
 
         Returns:
-            Tuple of (success: bool, use_https: bool)
+            Tuple of (success: bool, use_https: bool, api_info: dict | None)
         """
         session = async_get_clientsession(self.hass)
 
@@ -169,7 +182,8 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             url = f"https://{host}:{port}/api_version"
             async with session.get(url, ssl=ssl_context, timeout=aiohttp.ClientTimeout(total=10)) as response:
                 if response.status == 200:
-                    return True, True
+                    api_info = await response.json()
+                    return True, True, api_info
         except Exception:
             pass
 
@@ -178,12 +192,13 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             url = f"http://{host}:{port}/api_version"
             async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as response:
                 if response.status == 200:
-                    return True, False
+                    api_info = await response.json()
+                    return True, False, api_info
         except Exception:
             pass
 
         _LOGGER.error(f"Cannot connect to Freebox at {host}:{port} using HTTPS or HTTP")
-        return False, True
+        return False, True, None
 
     async def async_step_authorize(
         self, user_input: dict[str, Any] | None = None
@@ -262,10 +277,16 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         port = self.discovery_info[CONF_PORT]
         name = self.discovery_info.get("name", "Freebox")
 
-        success, use_https = await self._async_test_connection(host, port)
+        success, use_https, api_info = await self._async_test_connection(host, port)
         if success:
             # Store use_https for later
             self.use_https = use_https
+
+            # Update device name from API if available
+            if api_info:
+                device_name = api_info.get("device_name", "Freebox")
+                self.discovery_info["name"] = device_name
+
             # Connection successful, now request authorization
             self.freebox_api = FreeboxAPI(
                 host=host,
@@ -285,9 +306,12 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> FlowResult:
         """Final step with permissions information."""
         if user_input is not None:
-            # Create entry
+            # Create entry with device name if available
+            device_name = self.discovery_info.get("name", "Freebox")
+            title = device_name if device_name != "Freebox" else f"Freebox ({self.freebox_api.host})"
+
             return self.async_create_entry(
-                title=f"Freebox ({self.freebox_api.host})",
+                title=title,
                 data={
                     CONF_HOST: self.freebox_api.host,
                     CONF_PORT: self.freebox_api.port,

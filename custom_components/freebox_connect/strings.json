@@ -11,7 +11,7 @@
       },
       "confirm": {
         "title": "Confirmer la découverte de la Freebox",
-        "description": "Freebox trouvée : {name} à l'adresse {host}"
+        "description": "{name} détectée à l'adresse {host}"
       },
       "authorize": {
         "title": "Autoriser Home Assistant",
