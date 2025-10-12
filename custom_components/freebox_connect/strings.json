@@ -1,0 +1,42 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurer Freebox Connect",
+        "description": "Entrez les détails de connexion de votre Freebox",
+        "data": {
+          "host": "Hôte (domaine local comme xxxxxx.fbxos.fr)",
+          "port": "Port"
+        }
+      },
+      "confirm": {
+        "title": "Confirmer la découverte de la Freebox",
+        "description": "Freebox trouvée : {name} à l'adresse {host}"
+      },
+      "authorize": {
+        "title": "Autoriser Home Assistant",
+        "description": "{message}"
+      },
+      "finish": {
+        "title": "Configuration terminée",
+        "description": "{message}"
+      }
+    },
+    "error": {
+      "cannot_connect": "Échec de la connexion à la Freebox",
+      "auth_failed": "Échec de la demande d'autorisation",
+      "unknown": "Une erreur inattendue s'est produite"
+    },
+    "abort": {
+      "already_configured": "Cet appareil est déjà configuré",
+      "cannot_connect": "Impossible de se connecter à la Freebox",
+      "auth_denied": "Autorisation refusée. Veuillez réessayer et appuyer sur le bouton de votre Freebox.",
+      "auth_timeout": "Délai d'autorisation dépassé. Veuillez réessayer.",
+      "auth_check_failed": "Échec de la vérification du statut d'autorisation",
+      "discovery_failed": "La découverte automatique a échoué. Veuillez entrer les détails de votre Freebox manuellement."
+    }
+  },
+  "title": "Freebox Connect",
+  "config_flow_title": "Contrôle de votre Freebox",
+  "description": "Contrôlez votre Freebox et ses répéteurs WiFi : gestion WiFi, LED, redémarrage, suivi des appareils réseau et bien plus."
+}
