@@ -1,4 +1,5 @@
 """Binary sensor platform for Freebox Connect."""
+
 from __future__ import annotations
 
 from homeassistant.components.binary_sensor import BinarySensorEntity

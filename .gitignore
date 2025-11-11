@@ -22,6 +22,7 @@ wheels/
 
 # Virtual environments
 venv/
+.venv/
 ENV/
 env/
 
@@ -57,3 +58,6 @@ secrets.yaml
 *.pem
 *.key
 *.token
+
+# Ruff
+.ruff_cache/

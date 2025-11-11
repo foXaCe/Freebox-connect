@@ -1,4 +1,5 @@
 """Device management for Freebox Connect."""
+
 from __future__ import annotations
 
 from homeassistant.helpers.device_registry import DeviceInfo
@@ -16,7 +17,7 @@ def get_freebox_server_device(entry_id: str, system_data: dict) -> DeviceInfo:
         model=system_data.get("box_flavor", "Freebox"),
         sw_version=system_data.get("firmware_version"),
         serial_number=system_data.get("serial"),
-        configuration_url=f"http://mafreebox.freebox.fr",
+        configuration_url="http://mafreebox.freebox.fr",
     )
 
 

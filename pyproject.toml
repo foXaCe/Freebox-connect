@@ -1,0 +1,97 @@
+[project]
+name = "freebox-connect"
+version = "1.1.4"
+description = "Home Assistant integration for Freebox Connect"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+[tool.ruff]
+# Target Python 3.11+ (Home Assistant requirement)
+target-version = "py311"
+
+# Exclude common directories
+exclude = [
+    ".git",
+    ".github",
+    ".ruff_cache",
+    "__pycache__",
+    "*.pyc",
+]
+
+# Line length (standard for Home Assistant)
+line-length = 88
+
+[tool.ruff.lint]
+# Enable selected rule sets
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "I",     # isort
+    "N",     # pep8-naming
+    "UP",    # pyupgrade
+    "B",     # flake8-bugbear
+    "A",     # flake8-builtins
+    "C4",    # flake8-comprehensions
+    "DTZ",   # flake8-datetimez
+    "T10",   # flake8-debugger
+    "ISC",   # flake8-implicit-str-concat
+    "ICN",   # flake8-import-conventions
+    "PIE",   # flake8-pie
+    "PT",    # flake8-pytest-style
+    "Q",     # flake8-quotes
+    "RSE",   # flake8-raise
+    "RET",   # flake8-return
+    "SIM",   # flake8-simplify
+    "TID",   # flake8-tidy-imports
+    "ARG",   # flake8-unused-arguments
+    "PTH",   # flake8-use-pathlib
+    "ERA",   # eradicate
+    "PL",    # pylint
+    "PERF",  # perflint
+    "RUF",   # ruff-specific rules
+]
+
+# Ignore specific rules
+ignore = [
+    "E501",    # Line too long (handled by formatter)
+    "PLR0913", # Too many arguments in function definition
+    "PLR2004", # Magic value used in comparison
+    "PLR0912", # Too many branches
+    "ARG001",  # Unused function argument (required by Home Assistant API)
+    "ARG002",  # Unused method argument (required by Home Assistant API)
+    "SIM102",  # Use single if statement (reduces readability with walrus operator)
+    "RET504",  # Unnecessary assignment before return (can improve readability)
+    "PERF401", # Use list.extend (minor performance optimization)
+    "UP038",   # Use X | Y in isinstance (Python 3.10+ syntax, keep compatible)
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore import rules in __init__.py
+"__init__.py" = ["F401", "F403"]
+
+[tool.ruff.lint.isort]
+# Use Home Assistant import style
+force-sort-within-sections = true
+combine-as-imports = true
+split-on-trailing-comma = true
+
+[tool.ruff.lint.pylint]
+max-args = 10
+max-branches = 15
+max-returns = 8
+max-statements = 60
+
+[tool.ruff.format]
+# Use double quotes for strings
+quote-style = "double"
+
+# Indent with spaces
+indent-style = "space"
+
+# Respect magic trailing comma
+skip-magic-trailing-comma = false
+
+# Auto-detect line ending
+line-ending = "auto"

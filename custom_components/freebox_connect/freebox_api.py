@@ -1,4 +1,5 @@
 """Freebox API authentication and communication."""
+
 from __future__ import annotations
 
 import hashlib
@@ -65,7 +66,9 @@ class FreeboxAPI:
         async with session.get(url, ssl=self._get_ssl_context()) as response:
             if response.status == 200:
                 return await response.json()
-            raise FreeboxAuthorizationError(f"Failed to get API version: {response.status}")
+            raise FreeboxAuthorizationError(
+                f"Failed to get API version: {response.status}"
+            )
 
     async def request_authorization(
         self, session: aiohttp.ClientSession
@@ -87,7 +90,9 @@ class FreeboxAPI:
 
         _LOGGER.debug(f"Requesting authorization from Freebox: {payload}")
 
-        async with session.post(url, json=payload, ssl=self._get_ssl_context()) as response:
+        async with session.post(
+            url, json=payload, ssl=self._get_ssl_context()
+        ) as response:
             if response.status != 200:
                 raise FreeboxAuthorizationError(
                     f"Failed to request authorization: {response.status}"
@@ -97,7 +102,9 @@ class FreeboxAPI:
 
             if not data.get("success"):
                 error = data.get("msg", "Unknown error")
-                raise FreeboxAuthorizationError(f"Authorization request failed: {error}")
+                raise FreeboxAuthorizationError(
+                    f"Authorization request failed: {error}"
+                )
 
             result = data["result"]
             app_token = result["app_token"]
@@ -144,13 +151,17 @@ class FreeboxAPI:
             Session token to use for authenticated requests
         """
         if not self.app_token:
-            raise FreeboxAuthorizationError("No app_token available. Please authorize first.")
+            raise FreeboxAuthorizationError(
+                "No app_token available. Please authorize first."
+            )
 
         # Get challenge
         url = f"{self.base_url}/api/v11/login"
         async with session.get(url, ssl=self._get_ssl_context()) as response:
             if response.status != 200:
-                raise FreeboxAuthorizationError(f"Failed to get challenge: {response.status}")
+                raise FreeboxAuthorizationError(
+                    f"Failed to get challenge: {response.status}"
+                )
 
             data = await response.json()
 
@@ -171,9 +182,13 @@ class FreeboxAPI:
             "password": password,
         }
 
-        async with session.post(url, json=payload, ssl=self._get_ssl_context()) as response:
+        async with session.post(
+            url, json=payload, ssl=self._get_ssl_context()
+        ) as response:
             if response.status != 200:
-                raise FreeboxAuthorizationError(f"Failed to open session: {response.status}")
+                raise FreeboxAuthorizationError(
+                    f"Failed to open session: {response.status}"
+                )
 
             data = await response.json()
 
@@ -186,7 +201,9 @@ class FreeboxAPI:
 
             return self.session_token
 
-    async def check_permissions(self, session: aiohttp.ClientSession) -> dict[str, Any] | None:
+    async def check_permissions(
+        self, session: aiohttp.ClientSession
+    ) -> dict[str, Any] | None:
         """
         Check granted permissions for the app.
 
@@ -212,7 +229,9 @@ class FreeboxAPI:
         headers = {"X-Fbx-App-Auth": self.session_token}
 
         try:
-            async with session.post(url, headers=headers, ssl=self._get_ssl_context()) as response:
+            async with session.post(
+                url, headers=headers, ssl=self._get_ssl_context()
+            ) as response:
                 if response.status == 200:
                     _LOGGER.debug("Session closed successfully")
                 else:
@@ -242,21 +261,24 @@ class FreeboxAPI:
         headers = {"X-Fbx-App-Auth": self.session_token}
 
         try:
-            async with session.get(url, headers=headers, ssl=self._get_ssl_context()) as response:
+            async with session.get(
+                url, headers=headers, ssl=self._get_ssl_context()
+            ) as response:
                 if response.status == 200:
                     data = await response.json()
                     if data.get("success"):
                         return data.get("result")
-                    else:
-                        _LOGGER.warning(f"API call to {endpoint} failed: {data.get('msg')}")
-                        return None
-                elif response.status == 403:
+                    _LOGGER.warning(f"API call to {endpoint} failed: {data.get('msg')}")
+                    return None
+                if response.status == 403:
                     # Session expired, try to reopen
                     _LOGGER.info("Session expired, reopening...")
                     await self.open_session(session)
                     # Retry the request
                     headers = {"X-Fbx-App-Auth": self.session_token}
-                    async with session.get(url, headers=headers, ssl=self._get_ssl_context()) as retry_response:
+                    async with session.get(
+                        url, headers=headers, ssl=self._get_ssl_context()
+                    ) as retry_response:
                         if retry_response.status == 200:
                             data = await retry_response.json()
                             if data.get("success"):
@@ -270,7 +292,10 @@ class FreeboxAPI:
             return None
 
     async def put(
-        self, session: aiohttp.ClientSession, endpoint: str, payload: dict[str, Any] | None = None
+        self,
+        session: aiohttp.ClientSession,
+        endpoint: str,
+        payload: dict[str, Any] | None = None,
     ) -> dict[str, Any] | None:
         """
         Make an authenticated PUT request to the Freebox API.
@@ -290,21 +315,24 @@ class FreeboxAPI:
         headers = {"X-Fbx-App-Auth": self.session_token}
 
         try:
-            async with session.put(url, headers=headers, json=payload, ssl=self._get_ssl_context()) as response:
+            async with session.put(
+                url, headers=headers, json=payload, ssl=self._get_ssl_context()
+            ) as response:
                 if response.status == 200:
                     data = await response.json()
                     if data.get("success"):
                         return data.get("result")
-                    else:
-                        _LOGGER.warning(f"API PUT to {endpoint} failed: {data.get('msg')}")
-                        return None
-                elif response.status == 403:
+                    _LOGGER.warning(f"API PUT to {endpoint} failed: {data.get('msg')}")
+                    return None
+                if response.status == 403:
                     # Session expired, try to reopen
                     _LOGGER.info("Session expired, reopening...")
                     await self.open_session(session)
                     # Retry the request
                     headers = {"X-Fbx-App-Auth": self.session_token}
-                    async with session.put(url, headers=headers, json=payload, ssl=self._get_ssl_context()) as retry_response:
+                    async with session.put(
+                        url, headers=headers, json=payload, ssl=self._get_ssl_context()
+                    ) as retry_response:
                         if retry_response.status == 200:
                             data = await retry_response.json()
                             if data.get("success"):
@@ -314,11 +342,14 @@ class FreeboxAPI:
                     _LOGGER.warning(f"Failed to PUT {endpoint}: {response.status}")
                     return None
         except Exception as err:
-            _LOGGER.error(f"Error PUTing {endpoint}: {err}")
+            _LOGGER.error(f"Error performing PUT on {endpoint}: {err}")
             return None
 
     async def post(
-        self, session: aiohttp.ClientSession, endpoint: str, payload: dict[str, Any] | None = None
+        self,
+        session: aiohttp.ClientSession,
+        endpoint: str,
+        payload: dict[str, Any] | None = None,
     ) -> dict[str, Any] | None:
         """
         Make an authenticated POST request to the Freebox API.
@@ -338,21 +369,24 @@ class FreeboxAPI:
         headers = {"X-Fbx-App-Auth": self.session_token}
 
         try:
-            async with session.post(url, headers=headers, json=payload, ssl=self._get_ssl_context()) as response:
+            async with session.post(
+                url, headers=headers, json=payload, ssl=self._get_ssl_context()
+            ) as response:
                 if response.status == 200:
                     data = await response.json()
                     if data.get("success"):
                         return data.get("result")
-                    else:
-                        _LOGGER.warning(f"API POST to {endpoint} failed: {data.get('msg')}")
-                        return None
-                elif response.status == 403:
+                    _LOGGER.warning(f"API POST to {endpoint} failed: {data.get('msg')}")
+                    return None
+                if response.status == 403:
                     # Session expired, try to reopen
                     _LOGGER.info("Session expired, reopening...")
                     await self.open_session(session)
                     # Retry the request
                     headers = {"X-Fbx-App-Auth": self.session_token}
-                    async with session.post(url, headers=headers, json=payload, ssl=self._get_ssl_context()) as retry_response:
+                    async with session.post(
+                        url, headers=headers, json=payload, ssl=self._get_ssl_context()
+                    ) as retry_response:
                         if retry_response.status == 200:
                             data = await retry_response.json()
                             if data.get("success"):

@@ -1,4 +1,5 @@
 """Constants for the Freebox Connect integration."""
+
 from datetime import timedelta
 
 DOMAIN = "freebox_connect"

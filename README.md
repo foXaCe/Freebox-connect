@@ -2,6 +2,15 @@
 
 Intégration HACS pour contrôler votre Freebox via Home Assistant, basée sur l'analyse de l'API utilisée par l'application mobile Freebox Connect.
 
+
+## 💰 Soutenir le Projet
+
+Si cette intégration vous est utile, vous pouvez soutenir son développement avec un don en Bitcoin :
+
+**🪙 Adresse Bitcoin :** `bc1qhe4ge22x0anuyeg0fmts6rdmz3t735dnqwt3p7`
+
+Vos contributions m'aident à continuer d'améliorer ce projet et à ajouter de nouvelles fonctionnalités. Merci ! 🙏
+
 ## Installation
 
 ### Via HACS (recommandé)
@@ -281,6 +290,54 @@ Pour désactiver le proxy après analyse :
 - Ne laissez pas le proxy configuré en permanence sur Android
 
 ---
+
+## Développement
+
+### Qualité du code
+
+Ce projet utilise [Ruff](https://docs.astral.sh/ruff/) pour le linting et le formatage du code Python.
+
+#### Installation des outils de développement
+
+```bash
+# Installer Ruff
+pip install ruff
+
+# Installer pre-commit
+pip install pre-commit
+pre-commit install
+```
+
+#### Commandes disponibles
+
+```bash
+# Linting (vérifier le code)
+ruff check .
+
+# Linting avec auto-correction
+ruff check --fix .
+
+# Formatage du code
+ruff format .
+
+# Vérifier le formatage sans modifier
+ruff format --check .
+
+# Lancer tous les hooks pre-commit manuellement
+pre-commit run --all-files
+```
+
+#### Pre-commit hooks
+
+Les hooks pre-commit sont configurés pour s'exécuter automatiquement avant chaque commit :
+- Ruff linter avec auto-correction
+- Ruff formatter
+- Vérifications de base (trailing whitespace, end-of-file, etc.)
+- Codespell pour corriger les fautes de frappe
+
+#### CI/CD
+
+Les workflows GitHub Actions vérifient automatiquement la qualité du code sur chaque push et pull request.
 
 ## Licence
 

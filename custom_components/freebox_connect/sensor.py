@@ -1,9 +1,14 @@
 """Sensor platform for Freebox Connect."""
+
 from __future__ import annotations
 
 import time
 
-from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorStateClass
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -43,12 +48,22 @@ async def async_setup_entry(
                 continue
 
             repeater_device = get_freebox_repeater_device(entry.entry_id, repeater)
-            entities.extend([
-                FreeboxRepeaterSignalSensor(coordinator, entry, repeater, repeater_device),
-                FreeboxRepeaterStateSensor(coordinator, entry, repeater, repeater_device),
-                FreeboxRepeaterUptimeSensor(coordinator, entry, repeater, repeater_device),
-                FreeboxRepeaterConnectedDevicesSensor(coordinator, entry, repeater, repeater_device),
-            ])
+            entities.extend(
+                [
+                    FreeboxRepeaterSignalSensor(
+                        coordinator, entry, repeater, repeater_device
+                    ),
+                    FreeboxRepeaterStateSensor(
+                        coordinator, entry, repeater, repeater_device
+                    ),
+                    FreeboxRepeaterUptimeSensor(
+                        coordinator, entry, repeater, repeater_device
+                    ),
+                    FreeboxRepeaterConnectedDevicesSensor(
+                        coordinator, entry, repeater, repeater_device
+                    ),
+                ]
+            )
 
     async_add_entities(entities)
 
@@ -120,19 +135,18 @@ class FreeboxSystemSensor(CoordinatorEntity, SensorEntity):
         """Format uptime in a human-readable way."""
         if seconds < 60:
             return f"{seconds} s"
-        elif seconds < 3600:
+        if seconds < 3600:
             minutes = seconds // 60
             secs = seconds % 60
             return f"{minutes} min {secs} s"
-        elif seconds < 86400:
+        if seconds < 86400:
             hours = seconds // 3600
             minutes = (seconds % 3600) // 60
             return f"{hours} h {minutes} min"
-        else:
-            days = seconds // 86400
-            hours = (seconds % 86400) // 3600
-            minutes = (seconds % 3600) // 60
-            return f"{days} j {hours} h {minutes} min"
+        days = seconds // 86400
+        hours = (seconds % 86400) // 3600
+        minutes = (seconds % 3600) // 60
+        return f"{days} j {hours} h {minutes} min"
 
     @property
     def native_value(self) -> str | None:
@@ -201,7 +215,11 @@ class FreeboxWiFiStateSensor(CoordinatorEntity, SensorEntity):
             # Fallback: vérifier le champ "state"
             state = wifi_state.get("state")
             if state:
-                return "enabled" if state in ["on", "enabled", "active", "1", 1] else "disabled"
+                return (
+                    "enabled"
+                    if state in ["on", "enabled", "active", "1", 1]
+                    else "disabled"
+                )
         return None
 
     @property
@@ -217,9 +235,7 @@ class FreeboxWiFiStateSensor(CoordinatorEntity, SensorEntity):
             # Add detected WiFi bands
             if expected_phys := wifi_state.get("expected_phys"):
                 detected_bands = [
-                    phy.get("band")
-                    for phy in expected_phys
-                    if phy.get("detected")
+                    phy.get("band") for phy in expected_phys if phy.get("detected")
                 ]
                 if detected_bands:
                     attributes["detected_bands"] = ", ".join(detected_bands)
@@ -277,14 +293,18 @@ class FreeboxRepeaterSignalSensor(CoordinatorEntity, SensorEntity):
                                         # Signal is negative dBm (-30 to -90)
                                         # -30 dBm = excellent (100%), -90 dBm = poor (0%)
                                         signal_dbm = bh.get("signal")
-                                        quality = max(0, min(100, ((signal_dbm + 90) * 100) // 60))
+                                        quality = max(
+                                            0, min(100, ((signal_dbm + 90) * 100) // 60)
+                                        )
                                         return quality
 
                                 # If no best backhaul, use first one with signal
                                 for bh in backhaul:
                                     if bh.get("signal"):
                                         signal_dbm = bh.get("signal")
-                                        quality = max(0, min(100, ((signal_dbm + 90) * 100) // 60))
+                                        quality = max(
+                                            0, min(100, ((signal_dbm + 90) * 100) // 60)
+                                        )
                                         return quality
                         return None
         return None
@@ -354,11 +374,15 @@ class FreeboxStorageSensor(CoordinatorEntity, SensorEntity):
                 return {
                     "disks": [
                         {
-                            "name": disk.get("name") or f"Disque {disk.get('type', 'unknown').upper()}",
+                            "name": disk.get("name")
+                            or f"Disque {disk.get('type', 'unknown').upper()}",
                             "type": disk.get("type"),
-                            "total_gb": round(disk.get("total_bytes", 0) / (1024**3), 2),
+                            "total_gb": round(
+                                disk.get("total_bytes", 0) / (1024**3), 2
+                            ),
                             "used_gb": round(
-                                (disk.get("total_bytes", 0) - disk.get("free_bytes", 0)) / (1024**3),
+                                (disk.get("total_bytes", 0) - disk.get("free_bytes", 0))
+                                / (1024**3),
                                 2,
                             ),
                         }
@@ -450,7 +474,9 @@ class FreeboxRepeaterStateSensor(CoordinatorEntity, SensorEntity):
                 for repeater in repeater_data:
                     if repeater.get("id") == self._repeater_id:
                         # API uses 'status' field, not 'state'
-                        return repeater.get("status") or repeater.get("state", "unknown")
+                        return repeater.get("status") or repeater.get(
+                            "state", "unknown"
+                        )
         return None
 
     @property
@@ -508,19 +534,18 @@ class FreeboxRepeaterUptimeSensor(CoordinatorEntity, SensorEntity):
         """Format uptime in a human-readable way."""
         if seconds < 60:
             return f"{seconds} s"
-        elif seconds < 3600:
+        if seconds < 3600:
             minutes = seconds // 60
             secs = seconds % 60
             return f"{minutes} min {secs} s"
-        elif seconds < 86400:
+        if seconds < 86400:
             hours = seconds // 3600
             minutes = (seconds % 3600) // 60
             return f"{hours} h {minutes} min"
-        else:
-            days = seconds // 86400
-            hours = (seconds % 86400) // 3600
-            minutes = (seconds % 3600) // 60
-            return f"{days} j {hours} h {minutes} min"
+        days = seconds // 86400
+        hours = (seconds % 86400) // 3600
+        minutes = (seconds % 3600) // 60
+        return f"{days} j {hours} h {minutes} min"
 
     @property
     def native_value(self) -> str | None:
@@ -557,7 +582,9 @@ class FreeboxRepeaterUptimeSensor(CoordinatorEntity, SensorEntity):
                             uptime = current_time - boot_time
 
                         attributes = {
-                            "uptime_seconds": uptime if isinstance(uptime, (int, float)) else 0,
+                            "uptime_seconds": uptime
+                            if isinstance(uptime, (int, float))
+                            else 0,
                         }
 
                         # Add additional repeater info
@@ -592,7 +619,9 @@ class FreeboxRepeaterConnectedDevicesSensor(CoordinatorEntity, SensorEntity):
         """Initialize the sensor."""
         super().__init__(coordinator)
         self._repeater_id = repeater_data.get("id", "unknown")
-        self._attr_unique_id = f"{entry.entry_id}_repeater_{self._repeater_id}_connected_devices"
+        self._attr_unique_id = (
+            f"{entry.entry_id}_repeater_{self._repeater_id}_connected_devices"
+        )
         self._attr_has_entity_name = True
         self._attr_translation_key = "connected_devices"
         self._attr_icon = "mdi:devices"
@@ -619,13 +648,21 @@ class FreeboxRepeaterConnectedDevicesSensor(CoordinatorEntity, SensorEntity):
                                         repeater_bssids.append(bssid.upper())
 
                         # Count LAN devices connected to this repeater's access points
-                        if repeater_bssids and (lan_devices := self.coordinator.data.get("lan_devices")):
+                        if repeater_bssids and (
+                            lan_devices := self.coordinator.data.get("lan_devices")
+                        ):
                             if isinstance(lan_devices, list):
                                 for device in lan_devices:
                                     if device.get("active"):
                                         # Get BSSID from wifi_information if device is connected via WiFi
-                                        wifi_info = device.get("access_point", {}).get("wifi_information", {})
-                                        bssid = wifi_info.get("bssid", "").upper() if wifi_info else ""
+                                        wifi_info = device.get("access_point", {}).get(
+                                            "wifi_information", {}
+                                        )
+                                        bssid = (
+                                            wifi_info.get("bssid", "").upper()
+                                            if wifi_info
+                                            else ""
+                                        )
 
                                         if bssid and bssid in repeater_bssids:
                                             count += 1
@@ -664,14 +701,24 @@ class FreeboxRepeaterConnectedDevicesSensor(CoordinatorEntity, SensorEntity):
                                     if bssid := fh.get("bssid"):
                                         repeater_bssids.append(bssid.upper())
 
-                        if repeater_bssids and (lan_devices := self.coordinator.data.get("lan_devices")):
+                        if repeater_bssids and (
+                            lan_devices := self.coordinator.data.get("lan_devices")
+                        ):
                             if isinstance(lan_devices, list):
                                 for device in lan_devices:
                                     if device.get("active"):
-                                        wifi_info = device.get("access_point", {}).get("wifi_information", {})
-                                        bssid = wifi_info.get("bssid", "").upper() if wifi_info else ""
+                                        wifi_info = device.get("access_point", {}).get(
+                                            "wifi_information", {}
+                                        )
+                                        bssid = (
+                                            wifi_info.get("bssid", "").upper()
+                                            if wifi_info
+                                            else ""
+                                        )
                                         if bssid and bssid in repeater_bssids:
-                                            device_name = device.get("primary_name", "unknown")
+                                            device_name = device.get(
+                                                "primary_name", "unknown"
+                                            )
                                             connected_device_names.append(device_name)
 
                         if connected_device_names:

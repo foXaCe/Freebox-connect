@@ -1,4 +1,5 @@
 """Config flow for Freebox Connect integration."""
+
 from __future__ import annotations
 
 import asyncio
@@ -7,12 +8,12 @@ import ssl
 from typing import Any
 
 import aiohttp
-import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.components import zeroconf
 from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+import voluptuous as vol
 
 from .const import (
     CONF_APP_TOKEN,
@@ -86,7 +87,6 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self.app_token: str | None = None
         self.track_id: int | None = None
         self.use_https: bool = True
-
 
     async def async_step_zeroconf(
         self, discovery_info: zeroconf.ZeroconfServiceInfo
@@ -208,7 +208,9 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors={"base": "discovery_failed"},
         )
 
-    async def _async_test_connection(self, host: str, port: int) -> tuple[bool, bool, dict[str, Any] | None]:
+    async def _async_test_connection(
+        self, host: str, port: int
+    ) -> tuple[bool, bool, dict[str, Any] | None]:
         """Test connection to Freebox.
 
         Returns:
@@ -224,7 +226,9 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         # Try HTTPS first (Freebox API typically uses HTTPS)
         try:
             url = f"https://{host}:{port}/api_version"
-            async with session.get(url, ssl=ssl_context, timeout=aiohttp.ClientTimeout(total=10)) as response:
+            async with session.get(
+                url, ssl=ssl_context, timeout=aiohttp.ClientTimeout(total=10)
+            ) as response:
                 if response.status == 200:
                     api_info = await response.json()
                     return True, True, api_info
@@ -234,7 +238,9 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         # Fallback to HTTP if HTTPS fails
         try:
             url = f"http://{host}:{port}/api_version"
-            async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as response:
+            async with session.get(
+                url, timeout=aiohttp.ClientTimeout(total=10)
+            ) as response:
                 if response.status == 200:
                     api_info = await response.json()
                     return True, False, api_info
@@ -257,7 +263,10 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         # Request authorization
         try:
             session = async_get_clientsession(self.hass)
-            self.app_token, self.track_id = await self.freebox_api.request_authorization(session)
+            (
+                self.app_token,
+                self.track_id,
+            ) = await self.freebox_api.request_authorization(session)
 
             return self.async_show_form(
                 step_id="authorize",
@@ -290,17 +299,19 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Wait for authorization with timeout
         max_attempts = 30  # 30 attempts with 2 second delay = 1 minute
-        for attempt in range(max_attempts):
+        for _attempt in range(max_attempts):
             try:
-                status = await self.freebox_api.track_authorization(session, self.track_id)
+                status = await self.freebox_api.track_authorization(
+                    session, self.track_id
+                )
 
                 if status == "granted":
                     # Authorization granted, show final step with permissions info
                     return await self.async_step_finish()
-                elif status == "denied":
+                if status == "denied":
                     _LOGGER.error("Authorization denied by user")
                     return self.async_abort(reason="auth_denied")
-                elif status == "timeout":
+                if status == "timeout":
                     _LOGGER.error("Authorization timeout")
                     return self.async_abort(reason="auth_timeout")
 
@@ -319,7 +330,6 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Create entry from discovery info."""
         host = self.discovery_info[CONF_HOST]
         port = self.discovery_info[CONF_PORT]
-        name = self.discovery_info.get("name", "Freebox")
 
         success, use_https, api_info = await self._async_test_connection(host, port)
         if success:
@@ -351,7 +361,11 @@ class FreeboxConnectConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             # Create entry with device name if available
             device_name = self.discovery_info.get("name", "Freebox")
-            title = device_name if device_name != "Freebox" else f"Freebox ({self.freebox_api.host})"
+            title = (
+                device_name
+                if device_name != "Freebox"
+                else f"Freebox ({self.freebox_api.host})"
+            )
 
             return self.async_create_entry(
                 title=title,

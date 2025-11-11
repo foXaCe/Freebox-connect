@@ -1,4 +1,5 @@
 """Device tracker platform for Freebox Connect."""
+
 from __future__ import annotations
 
 from homeassistant.components.device_tracker import SourceType
@@ -8,7 +9,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import CONF_TRACK_NETWORK_DEVICES, DOMAIN
 from .coordinator import FreeboxConnectDataUpdateCoordinator
 
 

@@ -1,10 +1,10 @@
 """Button platform for Freebox Connect."""
+
 from __future__ import annotations
 
 import logging
-from typing import Any
 
-from homeassistant.components.button import ButtonEntity, ButtonDeviceClass
+from homeassistant.components.button import ButtonDeviceClass, ButtonEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -49,7 +49,9 @@ async def async_setup_entry(
             # Create buttons for all repeaters (don't filter by state)
             repeater_device = get_freebox_repeater_device(entry.entry_id, repeater)
             buttons.append(
-                FreeboxRepeaterRebootButton(coordinator, entry, repeater, repeater_device)
+                FreeboxRepeaterRebootButton(
+                    coordinator, entry, repeater, repeater_device
+                )
             )
             _LOGGER.debug(f"Added reboot button for repeater {repeater.get('id')}")
 
@@ -74,7 +76,9 @@ class FreeboxButtonBase(CoordinatorEntity, ButtonEntity):
         self._attr_translation_key = translation_key
         self._attr_icon = icon
         self._attr_device_class = device_class
-        self._attr_unique_id = f"{entry.entry_id}_{translation_key.lower().replace(' ', '_')}"
+        self._attr_unique_id = (
+            f"{entry.entry_id}_{translation_key.lower().replace(' ', '_')}"
+        )
         self._attr_device_info = device_info
 
     @property
@@ -107,8 +111,7 @@ class FreeboxRebootButton(FreeboxButtonBase):
         _LOGGER.info("Rebooting Freebox...")
         try:
             result = await self.coordinator.api.post(
-                self.coordinator.session,
-                API_SYSTEM_REBOOT
+                self.coordinator.session, API_SYSTEM_REBOOT
             )
             # Reboot endpoint may return None or empty result (server is rebooting)
             if result is not None:
@@ -164,23 +167,32 @@ class FreeboxRepeaterRebootButton(FreeboxButtonBase):
         try:
             # Try with trailing slash
             result = await self.coordinator.api.post(
-                self.coordinator.session,
-                f"{API_REPEATER}{self._repeater_id}/reboot/"
+                self.coordinator.session, f"{API_REPEATER}{self._repeater_id}/reboot/"
             )
             if result is not None:
-                _LOGGER.info(f"Freebox repeater {self._repeater_id} reboot initiated successfully")
+                _LOGGER.info(
+                    f"Freebox repeater {self._repeater_id} reboot initiated successfully"
+                )
                 await self.coordinator.async_request_refresh()
             else:
                 # Try without trailing slash
-                _LOGGER.debug(f"Retrying reboot without trailing slash for repeater {self._repeater_id}")
+                _LOGGER.debug(
+                    f"Retrying reboot without trailing slash for repeater {self._repeater_id}"
+                )
                 result = await self.coordinator.api.post(
                     self.coordinator.session,
-                    f"{API_REPEATER}{self._repeater_id}/reboot"
+                    f"{API_REPEATER}{self._repeater_id}/reboot",
                 )
                 if result is not None:
-                    _LOGGER.info(f"Freebox repeater {self._repeater_id} reboot initiated successfully")
+                    _LOGGER.info(
+                        f"Freebox repeater {self._repeater_id} reboot initiated successfully"
+                    )
                     await self.coordinator.async_request_refresh()
                 else:
-                    _LOGGER.debug(f"Reboot endpoint not available for repeater {self._repeater_id} (this is normal for some repeater models)")
+                    _LOGGER.debug(
+                        f"Reboot endpoint not available for repeater {self._repeater_id} (this is normal for some repeater models)"
+                    )
         except Exception as err:
-            _LOGGER.error(f"Error rebooting Freebox repeater {self._repeater_id}: {err}")
+            _LOGGER.error(
+                f"Error rebooting Freebox repeater {self._repeater_id}: {err}"
+            )

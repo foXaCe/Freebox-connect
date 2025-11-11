@@ -1,10 +1,10 @@
 """Update platform for Freebox Connect."""
+
 from __future__ import annotations
 
 import logging
-from typing import Any
 
-from homeassistant.components.update import UpdateEntity, UpdateEntityFeature
+from homeassistant.components.update import UpdateEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -77,4 +77,6 @@ class FreeboxFirmwareUpdateEntity(CoordinatorEntity, UpdateEntity):
     @property
     def available(self) -> bool:
         """Return if entity is available."""
-        return self.coordinator.last_update_success and "system" in self.coordinator.data
+        return (
+            self.coordinator.last_update_success and "system" in self.coordinator.data
+        )

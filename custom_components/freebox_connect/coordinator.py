@@ -1,9 +1,8 @@
 """Data update coordinator for Freebox Connect."""
+
 from __future__ import annotations
 
 import logging
-import ssl
-from datetime import timedelta
 from typing import Any
 
 from aiohttp import ClientSession
