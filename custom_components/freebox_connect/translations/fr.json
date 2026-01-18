@@ -45,6 +45,11 @@
   },
   "description": "Contrôlez votre Freebox et ses répéteurs WiFi",
   "entity": {
+    "binary_sensor": {
+      "freebox_internet": {
+        "name": "Internet"
+      }
+    },
     "button": {
       "freebox_reboot": {
         "name": "Redémarrer"

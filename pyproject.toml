@@ -64,7 +64,6 @@ ignore = [
     "SIM102",  # Use single if statement (reduces readability with walrus operator)
     "RET504",  # Unnecessary assignment before return (can improve readability)
     "PERF401", # Use list.extend (minor performance optimization)
-    "UP038",   # Use X | Y in isinstance (Python 3.10+ syntax, keep compatible)
 ]
 
 [tool.ruff.lint.per-file-ignores]

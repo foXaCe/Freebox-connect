@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from homeassistant.components.device_tracker import SourceType
 from homeassistant.components.device_tracker.config_entry import ScannerEntity
 from homeassistant.config_entries import ConfigEntry
@@ -86,7 +88,7 @@ class FreeboxDeviceTracker(CoordinatorEntity, ScannerEntity):
         return None
 
     @property
-    def extra_state_attributes(self) -> dict[str, any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return additional attributes."""
         if lan_devices := self.coordinator.data.get("lan_devices"):
             if isinstance(lan_devices, list):

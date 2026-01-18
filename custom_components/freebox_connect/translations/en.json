@@ -45,6 +45,11 @@
   },
   "description": "Control your Freebox and WiFi repeaters",
   "entity": {
+    "binary_sensor": {
+      "freebox_internet": {
+        "name": "Internet"
+      }
+    },
     "button": {
       "freebox_reboot": {
         "name": "Reboot"

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from homeassistant.helpers.device_registry import DeviceInfo
-from homeassistant.helpers.entity import Entity
 
 from .const import DOMAIN
 
@@ -25,7 +24,7 @@ def get_freebox_repeater_device(entry_id: str, repeater_data: dict) -> DeviceInf
     """Get device info for a Freebox Repeater."""
     # Extract repeater identifier
     repeater_id = repeater_data.get("id", "unknown")
-    repeater_name = repeater_data.get("name", f"Répéteur {repeater_id}")
+    repeater_name = repeater_data.get("name", f"Repeater {repeater_id}")
 
     return DeviceInfo(
         identifiers={(DOMAIN, f"{entry_id}_repeater_{repeater_id}")},
@@ -36,16 +35,3 @@ def get_freebox_repeater_device(entry_id: str, repeater_data: dict) -> DeviceInf
         serial_number=repeater_data.get("serial"),
         via_device=(DOMAIN, f"{entry_id}_server"),  # Link to server
     )
-
-
-class FreeboxDeviceEntity(Entity):
-    """Base class for Freebox entities with device association."""
-
-    def __init__(self, device_info: DeviceInfo) -> None:
-        """Initialize the entity."""
-        self._attr_device_info = device_info
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device info."""
-        return self._attr_device_info

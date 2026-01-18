@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+from typing import Any
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -95,7 +96,7 @@ class FreeboxConnectionSensor(CoordinatorEntity, SensorEntity):
         return None
 
     @property
-    def extra_state_attributes(self) -> dict[str, any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return additional attributes."""
         if connection := self.coordinator.data.get("connection"):
             attributes = {
@@ -162,7 +163,7 @@ class FreeboxSystemSensor(CoordinatorEntity, SensorEntity):
         return None
 
     @property
-    def extra_state_attributes(self) -> dict[str, any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return additional attributes."""
         if system := self.coordinator.data.get("system"):
             uptime = system.get("uptime_val") or system.get("uptime")
@@ -223,7 +224,7 @@ class FreeboxWiFiStateSensor(CoordinatorEntity, SensorEntity):
         return None
 
     @property
-    def extra_state_attributes(self) -> dict[str, any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return additional attributes."""
         if wifi_state := self.coordinator.data.get("wifi_state"):
             attributes = {}
@@ -310,7 +311,7 @@ class FreeboxRepeaterSignalSensor(CoordinatorEntity, SensorEntity):
         return None
 
     @property
-    def extra_state_attributes(self) -> dict[str, any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return additional attributes."""
         if repeater_data := self.coordinator.data.get("repeater"):
             if isinstance(repeater_data, list):
@@ -367,7 +368,7 @@ class FreeboxStorageSensor(CoordinatorEntity, SensorEntity):
         return None
 
     @property
-    def extra_state_attributes(self) -> dict[str, any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return additional attributes."""
         if storage := self.coordinator.data.get("storage"):
             if isinstance(storage, list):
@@ -425,7 +426,7 @@ class FreeboxServerConnectedDevicesSensor(CoordinatorEntity, SensorEntity):
         return count
 
     @property
-    def extra_state_attributes(self) -> dict[str, any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return additional attributes."""
         attributes = {}
         connected_device_names = []
@@ -480,7 +481,7 @@ class FreeboxRepeaterStateSensor(CoordinatorEntity, SensorEntity):
         return None
 
     @property
-    def extra_state_attributes(self) -> dict[str, any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return additional attributes."""
         if repeater_data := self.coordinator.data.get("repeater"):
             if isinstance(repeater_data, list):
@@ -567,7 +568,7 @@ class FreeboxRepeaterUptimeSensor(CoordinatorEntity, SensorEntity):
         return None
 
     @property
-    def extra_state_attributes(self) -> dict[str, any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return additional attributes."""
         if repeater_data := self.coordinator.data.get("repeater"):
             if isinstance(repeater_data, list):
@@ -671,7 +672,7 @@ class FreeboxRepeaterConnectedDevicesSensor(CoordinatorEntity, SensorEntity):
         return 0
 
     @property
-    def extra_state_attributes(self) -> dict[str, any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return additional attributes."""
         if repeater_data := self.coordinator.data.get("repeater"):
             if isinstance(repeater_data, list):
