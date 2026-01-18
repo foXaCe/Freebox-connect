@@ -1,7 +1,7 @@
 {
   "name": "Freebox Connect",
   "render_readme": true,
-  "description": "Contrôlez votre Freebox et ses répéteurs WiFi : gestion WiFi, LED, redémarrage, suivi des appareils réseau",
+  "description": "Control your Freebox and WiFi repeaters: WiFi management, LED control, reboot, network device tracking",
   "homeassistant": "2024.1.0",
   "domains": ["sensor", "binary_sensor", "device_tracker", "button", "switch", "update"]
 }

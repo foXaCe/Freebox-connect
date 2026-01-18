@@ -1,0 +1,140 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "El dispositivo ya está configurado",
+      "auth_check_failed": "Error al verificar el estado de autorización",
+      "auth_denied": "Autorización denegada. Inténtelo de nuevo y presione el botón de su Freebox.",
+      "auth_timeout": "Tiempo de autorización agotado. Inténtelo de nuevo.",
+      "cannot_connect": "No se puede conectar a la Freebox",
+      "discovery_failed": "La detección automática falló. Ingrese los datos de su Freebox manualmente."
+    },
+    "error": {
+      "auth_failed": "Error al solicitar autorización",
+      "cannot_connect": "Error al conectar con la Freebox",
+      "unknown": "Ocurrió un error inesperado"
+    },
+    "step": {
+      "authorize": {
+        "description": "{message}",
+        "title": "Autorizar Home Assistant"
+      },
+      "confirm": {
+        "description": "{name} detectado en {host}",
+        "title": "Confirmar descubrimiento de Freebox"
+      },
+      "finish": {
+        "description": "{message}",
+        "title": "Configuración completada"
+      },
+      "options": {
+        "data": {
+          "track_network_devices": "Rastrear dispositivos de red"
+        },
+        "description": "¿Desea rastrear todos los dispositivos en su red local?\n\nSi está deshabilitado, solo se agregará el dispositivo principal Freebox.",
+        "title": "Opciones de Freebox Connect"
+      },
+      "user": {
+        "data": {
+          "host": "Host (dominio local como xxxxxx.fbxos.fr)",
+          "port": "Puerto"
+        },
+        "description": "Ingrese los datos de conexión de su Freebox",
+        "title": "Configurar Freebox Connect"
+      }
+    }
+  },
+  "description": "Controle su Freebox y repetidores WiFi",
+  "entity": {
+    "binary_sensor": {
+      "freebox_internet": {
+        "name": "Internet"
+      }
+    },
+    "button": {
+      "freebox_reboot": {
+        "name": "Reiniciar"
+      },
+      "reboot": {
+        "name": "Reiniciar"
+      }
+    },
+    "sensor": {
+      "connected_devices": {
+        "name": "Dispositivos conectados"
+      },
+      "freebox_connection_status": {
+        "name": "Estado de conexión",
+        "state": {
+          "down": "Inactivo",
+          "unknown": "Desconocido",
+          "up": "Activo"
+        }
+      },
+      "freebox_storage": {
+        "name": "Almacenamiento"
+      },
+      "freebox_uptime": {
+        "name": "Tiempo de actividad"
+      },
+      "freebox_wifi_state": {
+        "name": "Estado del WiFi",
+        "state": {
+          "disabled": "Deshabilitado",
+          "enabled": "Habilitado"
+        }
+      },
+      "signal_quality": {
+        "name": "Calidad de señal"
+      },
+      "state": {
+        "name": "Estado",
+        "state": {
+          "running": "En funcionamiento",
+          "stopped": "Detenido",
+          "unknown": "Desconocido"
+        }
+      },
+      "uptime": {
+        "name": "Tiempo de actividad"
+      }
+    },
+    "switch": {
+      "display_rotated_180°": {
+        "name": "Pantalla girada 180°"
+      },
+      "freebox_led_indicator": {
+        "name": "Indicador LED"
+      },
+      "freebox_wifi": {
+        "name": "WiFi"
+      },
+      "hide_wifi_key": {
+        "name": "Ocultar clave WiFi"
+      },
+      "led_indicator": {
+        "name": "Indicador LED"
+      }
+    },
+    "update": {
+      "freebox_firmware": {
+        "name": "Firmware Freebox"
+      }
+    }
+  },
+  "name": "Freebox Connect",
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "track_network_devices": "Rastrear dispositivos de red"
+        },
+        "data_description": {
+          "track_network_devices": "Si está habilitado, se rastrearán todos los dispositivos conectados a la red local. Si está deshabilitado, solo se agregará el dispositivo principal Freebox."
+        },
+        "description": "Configure las opciones de la integración Freebox Connect",
+        "title": "Opciones de Freebox Connect"
+      }
+    }
+  },
+  "title": "Freebox Connect"
+}
