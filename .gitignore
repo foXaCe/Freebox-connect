@@ -26,19 +26,28 @@ venv/
 ENV/
 env/
 
+# Environment variables
+.env
+.env.local
+.env.*.local
+
 # IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+*.code-workspace
 
-# Claude Code
+# Claude Code (local files, do not share)
 .claude/
+CLAUDE.md
+AGENTS.md
 
 # Logs
 *.log
 logs/
+logging.conf
 
 # Test files
 test_*.py
@@ -48,7 +57,11 @@ run_test_*.sh
 .DS_Store
 Thumbs.db
 
-# Home Assistant
+# Home Assistant specific
+config/
+.HA_VERSION
+home-assistant.log
+home-assistant_v2.db
 secrets.yaml
 *.db
 *.db-shm
@@ -61,3 +74,9 @@ secrets.yaml
 
 # Ruff
 .ruff_cache/
+
+# Tests & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/

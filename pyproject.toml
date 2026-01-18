@@ -95,3 +95,7 @@ skip-magic-trailing-comma = false
 
 # Auto-detect line ending
 line-ending = "auto"
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv", "venv"]
+skips = ["B101"]  # Skip assert warnings (used in tests)
