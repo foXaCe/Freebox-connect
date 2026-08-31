@@ -45,7 +45,9 @@ async def async_setup_entry(
             if not repeater.get("id"):
                 continue
 
-            repeater_device = get_freebox_repeater_device(entry.entry_id, repeater)
+            repeater_device = get_freebox_repeater_device(
+                entry.entry_id, repeater, coordinator.server_device_id
+            )
             # Only add LED switch (repeaters cannot be disabled via API)
             switches.append(
                 FreeboxRepeaterLEDSwitch(coordinator, entry, repeater, repeater_device)

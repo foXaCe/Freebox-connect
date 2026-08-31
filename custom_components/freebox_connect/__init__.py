@@ -7,10 +7,12 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import CONF_APP_TOKEN, CONF_USE_HTTPS, DOMAIN
 from .coordinator import FreeboxConnectDataUpdateCoordinator
+from .device import get_freebox_server_device
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -36,6 +38,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
 
     await coordinator.async_config_entry_first_refresh()
+
+    # Register the Freebox Server device upfront so child devices (repeaters)
+    # can reference it through `via_device_id`.
+    server_device = dr.async_get(hass).async_get_or_create(
+        config_entry_id=entry.entry_id,
+        **get_freebox_server_device(entry.entry_id, coordinator.data.get("system", {})),
+    )
+    coordinator.server_device_id = server_device.id
 
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator

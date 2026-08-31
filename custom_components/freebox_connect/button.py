@@ -47,7 +47,9 @@ async def async_setup_entry(
             _LOGGER.debug(f"Found repeater {repeater.get('id')} with state: {state}")
 
             # Create buttons for all repeaters (don't filter by state)
-            repeater_device = get_freebox_repeater_device(entry.entry_id, repeater)
+            repeater_device = get_freebox_repeater_device(
+                entry.entry_id, repeater, coordinator.server_device_id
+            )
             buttons.append(
                 FreeboxRepeaterRebootButton(
                     coordinator, entry, repeater, repeater_device
