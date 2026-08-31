@@ -43,6 +43,8 @@ class FreeboxConnectDataUpdateCoordinator(DataUpdateCoordinator):
         self.session = session
         self.host = host
         self.port = port
+        # Device registry id of the Freebox Server, set during setup
+        self.server_device_id: str | None = None
 
         # Initialize Freebox API client
         self.api = FreeboxAPI(host=host, port=port, use_https=use_https)
